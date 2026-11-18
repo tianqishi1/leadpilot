@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block body %}
+<h3>半人工录入真实信号（P0 真实来源入口）</h3>
+<p class="muted">把你人工看到的真实公开信号贴进来（招聘/新分支/参展/在投广告/新注册/环评/招标），系统做门禁+归一+DeepSeek背调→线索卡。不爬社媒、不自动联系。</p>
+<form method="post" action="/api/signals/intake" class="card">
+<label>信号源 <select name="source"><option>hiring_sales</option><option>new_branch</option><option>exhibition</option><option>ads_running</option><option>new_reg</option><option>js_eia</option><option>ccgp</option></select></label><br><br>
+<label>公司名 <input name="company" required size="40" placeholder="苏州××智能装备有限公司"></label><br><br>
+<label>信号/项目 <input name="project" required size="40" placeholder="扩招销售工程师5人"></label><br><br>
+<label>区域 <input name="region" size="10" placeholder="江苏"></label>
+<label>联系人 <input name="contact_name" size="10"></label>
+<label>公示电话 <input name="contact_phone" size="16" placeholder="0512-xxxxxxx(座机)"></label><br><br>
+<label>证据URL(每行一个)<br><textarea name="evidence_urls" rows="3" cols="70" placeholder="https://...招聘页&#10;https://...登记页"></textarea></label><br><br>
+<label>原文摘录<br><textarea name="raw_text" rows="4" cols="70" placeholder="招聘:销售工程师x5; 主营:数控机床/自动化产线; 联系:周总 0512-..."></textarea></label><br><br>
+<button class="btn">提交→背调→线索卡</button></form>
+{% endblock %}

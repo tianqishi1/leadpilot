@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block body %}
+<h3>租户配置（行业包 OHS 快照）</h3>
+{% if msg %}<p class="tag">{{ msg }}</p>{% endif %}
+<div class="card"><h4>钉钉推送通道（可直接在此配置, 无需改 .env/重启）</h4>
+<form method="post" action="/api/settings/channel">
+<label>群机器人 Webhook<br><input name="webhook" size="80" value="{{ ch.dingtalk_webhook or '' }}" placeholder="https://oapi.dingtalk.com/robot/send?access_token=..."></label><br><br>
+<label>加签 Secret<br><input name="secret" size="80" value="" placeholder="{{ ch.dingtalk_secret or 'SEC...' }}（留空=不修改）"></label><br><br>
+<button class="btn">保存通道</button></form>
+<form method="post" action="/api/settings/channel/test" style="display:inline"><button class="btn gray">发送测试消息</button></form>
+<p class="muted">当前: {{ ch.dingtalk_webhook or '未配置(回退 .env)' }} / secret {{ ch.dingtalk_secret or '未配置' }}</p></div>
+<div class="card"><pre style="white-space:pre-wrap;font-size:12px">{{ cfg.pack.spec if cfg.pack else '{}' }}</pre></div>
+<h3>目录</h3><table><tr><th>品类</th><th>关键词</th><th>地板价</th></tr>
+{% for c in cfg.catalog %}<tr><td>{{ c.category }}</td><td>{{ c.keywords }}</td><td>{{ c.budget_floor }}</td></tr>{% endfor %}</table>
+<p class="muted">pack 变更需过评测门禁后 shadow→canary→full（P0 控制台只读, 变更走 scripts/evals）。</p>
+{% endblock %}

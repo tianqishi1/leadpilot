@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block body %}
+<h3>线索池</h3>
+<p><a class="btn gray" href="/leads">全部</a> <a class="btn gray" href="/leads?status=ready">ready</a> <a class="btn gray" href="/leads?status=delivered">delivered</a> <a class="btn gray" href="/leads?status=accepted">accepted</a> <a class="btn gray" href="/leads?status=invalid">invalid</a></p>
+<table><tr><th>公司/项目</th><th>状态</th><th>score</th><th>验收截止</th><th>动作</th></tr>
+{% for l in leads %}<tr><td>{{ l.card.company }}<br><span class="muted">{{ l.card.project }}</span></td><td>{{ status_label(l.status) }}<br><span class="muted">{{ demo_tag(l.card) }}</span></td><td>{{ l.score }}</td><td class="muted">{{ l.acceptance_due_at or '' }}</td>
+<td>{% if l.status=='delivered' %}
+<form method="post" action="/api/leads/{{ l.id }}/accept" style="display:inline"><button class="btn">accept</button></form>
+<form method="post" action="/api/leads/{{ l.id }}/invalidate" style="display:inline"><input name="reason_code" placeholder="理由码" size="6" required><button class="btn red">invalid</button></form>
+{% elif l.status=='accepted' %}<form method="post" action="/api/leads/{{ l.id }}/stage"><input type="hidden" name="to" value="contacted"><button class="btn gray">contacted</button></form>
+{% elif l.status=='contacted' %}<form method="post" action="/api/leads/{{ l.id }}/stage"><input type="hidden" name="to" value="opportunity"><button class="btn gray">opportunity</button></form>
+{% elif l.status=='opportunity' %}<form method="post" action="/api/leads/{{ l.id }}/stage"><input type="hidden" name="to" value="deal"><button class="btn gray">deal</button></form>{% endif %}</td></tr>{% endfor %}</table>
+{% endblock %}

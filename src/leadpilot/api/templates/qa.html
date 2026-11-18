@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% block body %}
+<h3>线索卡质检队列（草稿）</h3>
+{% for l in leads %}<div class="card"><b>{{ l.card.company }}</b> ｜ {{ l.card.project }}
+<span class="tag">{{ stage_label(l.stage) }}</span><span class="tag">匹配度 {{ score_pct(l.score) }}</span><span class="tag">置信 {{ conf_label(l.confidence) }}</span><span class="tag">{{ demo_tag(l.card) }}</span>
+<p class="muted">需求: {{ l.card.inferred_need or l.card.intent_summary or l.card.summary or l.card.project }}<br>窗口: {{ l.card.expected_window or l.card.procurement_window or '待电话核实' }}<br>开场: {{ l.card.opener or l.card.opening_line or ('看到贵司' ~ l.card.project ~ '的公开信号, 想跟您确认下采购/扩编计划, 方便聊两句吗?') }}</p>
+<p class="muted">证据: {% for u in l.card.evidence %}<a href="{{ u }}" target="_blank">{{ u[:60] }}</a>　{% endfor %}</p>
+<form method="post" action="/api/qa/{{ l.id }}/approve" style="display:inline"><button class="btn">通过→待推送</button></form>
+<form method="post" action="/api/qa/{{ l.id }}/drop" style="display:inline"><input type="hidden" name="reason" value="qa_drop"><button class="btn red">drop</button></form></div>
+{% else %}<p class="muted">空。触发 crawl+research 后此处出现草稿。</p>{% endfor %}
+{% endblock %}

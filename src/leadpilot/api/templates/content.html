@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% block body %}
+<h3>内容工厂</h3>
+<form method="post" action="/api/content/draft"><select name="platform"><option>zhihu</option><option>wechat</option><option>xhs</option><option>douyin</option></select><button class="btn">生成草稿</button></form>
+<table><tr><th>topic/平台</th><th>状态</th><th>claims</th><th>动作</th></tr>
+{% for c in items %}<tr><td>{{ c.topic }}<br><span class="muted">{{ c.platform }}</span></td><td>{{ status_label(c.status) }}</td><td class="muted">{{ c.claims|length }}</td>
+<td><button class="btn gray" onclick="navigator.clipboard.writeText(this.dataset.t)" data-t="{{ c.body }}">复制文本</button> <a class="btn gray" href="/api/content/{{ c.id }}/export">下载.md</a> {% if c.status=='pending_approval' %}<form method="post" action="/api/content/{{ c.id }}/approve"><input type="hidden" name="payload_hash" value="{{ c.payload_hash }}"><button class="btn">approve(绑hash)</button></form>{% endif %}</td></tr>
+<tr><td colspan="4" class="muted" style="white-space:pre-wrap">{{ c.body[:300] }}</td></tr>{% endfor %}</table>
+<h3>remediation（证据撤销传播）</h3><table><tr><th>content</th><th>理由</th><th>due</th></tr>
+{% for r in rem %}<tr><td>{{ r.content_id[:8] }}</td><td>{{ r.reason }}</td><td>{{ r.due_at }}</td></tr>{% endfor %}</table>
+{% endblock %}

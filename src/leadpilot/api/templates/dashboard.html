@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block body %}
+<h3>周 ROI / 成本看板</h3>
+{% if msg %}<p class="tag">{{ msg }}</p>{% endif %}
+<p class="muted">当前信号模式: {{ mode }}（mock=演示 / live=真实招聘源; 改 .env SIGNAL_MODE）</p>
+<div class="card"><table><tr><th>状态分布</th><td>{{ stats.by_status }}</td></tr>
+<tr><th>已计费线索</th><td>{{ stats.metered }}</td></tr><tr><th>收入(元)</th><td>{{ stats.revenue_rmb }}</td></tr>
+<tr><th>成本(元)</th><td>{{ stats.cost_rmb }}</td></tr><tr><th>单合格线索成本</th><td>{{ stats.cost_per_accepted }}</td></tr>
+<tr><th>接受率</th><td>{{ stats.accept_rate }}</td></tr><tr><th>补换 open / 超窗</th><td>{{ stats.repl_open }} / {{ stats.repl_breached }}</td></tr></table></div>
+<h3>待补换</h3><table><tr><th>线索编号</th><th>无效理由</th><th>补换截止</th><th>状态</th></tr>
+{% for r in repl %}<tr><td>{{ r.lead_id[:8] }}</td><td>{{ r.reason }}</td><td>{{ r.due_at }}</td><td>{{ status_label(r.status) }}</td></tr>{% endfor %}</table>
+<form method="post" action="/api/jobs/run"><input type="hidden" name="kind" value="crawl"><button class="btn">立即采集信号</button></form>
+<form method="post" action="/api/jobs/run" style="display:inline"><input type="hidden" name="kind" value="digest"><button class="btn gray">立即推送日报</button></form>
+{% endblock %}

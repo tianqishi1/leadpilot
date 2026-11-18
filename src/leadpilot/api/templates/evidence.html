@@ -1,0 +1,10 @@
+{% extends "base.html" %}{% block body %}
+<h3>证据库</h3>
+<table><tr><th>type</th><th>status</th><th>metric/来源</th><th>过期</th><th>动作</th></tr>
+{% for e in items %}<tr><td>{{ e.type }}</td><td>{{ e.status }}</td><td class="muted">{{ e.metric or e.source_urls }}</td><td class="muted">{{ e.expires_at or '' }}</td>
+<td>{% if e.status in ['published','authorized'] %}<form method="post" action="/api/evidence/{{ e.id }}/revoke" style="display:inline"><button class="btn red">revoke</button></form>{% endif %}
+{% if e.status=='draft' %}<form method="post" action="/api/evidence/{{ e.id }}/advance" style="display:inline"><input type="hidden" name="to" value="submitted"><button class="btn gray">submit</button></form>{% endif %}
+{% if e.status=='submitted' %}<form method="post" action="/api/evidence/{{ e.id }}/advance" style="display:inline"><input type="hidden" name="to" value="audited"><button class="btn gray">audit</button></form>{% endif %}
+{% if e.status=='audited' %}<form method="post" action="/api/evidence/{{ e.id }}/advance" style="display:inline"><input type="hidden" name="to" value="authorized"><button class="btn gray">authorize</button></form>{% endif %}
+{% if e.status=='authorized' %}<form method="post" action="/api/evidence/{{ e.id }}/advance" style="display:inline"><input type="hidden" name="to" value="published"><button class="btn gray">publish</button></form>{% endif %}</td></tr>{% endfor %}</table>
+{% endblock %}
