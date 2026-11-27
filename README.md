@@ -1,5 +1,8 @@
 # LeadPilot P0 骨架
 
+
+> **生态**：底座 [agent-base](https://github.com/tianqishi1/agent-base) · 评测 [eval-pipeline](https://github.com/tianqishi1/eval-pipeline) · 技能 [marketing-skills-cn](https://github.com/tianqishi1/marketing-skills-cn)
+
 依据：docs/tech-implementation-detailed-v0.1.md（唯一实现依据）。
 单人零起步：Python 模块化单体(api) + worker 两进程；dev 默认 sqlite 零外部依赖；生产 PG(RDS)+compose。
 
