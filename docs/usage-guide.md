@@ -1,10 +1,10 @@
 # LeadPilot 使用说明（P0）
 
-更新：2026-11-18 ｜ 适用：D:\codex\leadpilot 当前骨架
+更新：2026-11-18 ｜ 适用：leadpilot 当前骨架
 
 ## 1. 启动 / 停止 / 登录
 ```powershell
-cd D:\codex\leadpilot
+cd leadpilot
 pip install -r requirements.txt        # 首次
 python scripts/dev.py                  # 起 api:8000 + worker（读 .env）
 python scripts/stop.py                 # 停止
